@@ -150,7 +150,7 @@ def kmeans(data, k, distance, output, settype):
   
     labels= get_labels(X, clusters)
     print('The Davies-Bouldin score is', davis_bouldin(X, labels))
-    print('The best purity score is %f' % best_score)
+    print('The purity score is %f' % best_score)
     print('The Silhouette score is', silhouette_score(X, labels, metric='euclidean', sample_size=len(X), random_state=None))
     print('The Calinski Harabasz score is', calinski_harabasz_score(X, labels))
     
