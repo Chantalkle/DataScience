@@ -5,6 +5,8 @@ import os
 from collections import Counter
 from sklearn import preprocessing
 from sklearn.metrics import davies_bouldin_score
+from sklearn.metrics import silhouette_score
+from sklearn.metrics import calinski_harabasz_score
 from collections import defaultdict
 
 
@@ -98,6 +100,18 @@ def get_purity(clusters, centroids, num_instances):
         counts += Counter(labels).most_common(1)[0][1]
     return float(counts)/num_instances
 
+def get_labels(X, clusters):
+    labels = []
+    for x in X:
+        # find in which cluster x is
+        for keys in list(clusters.keys()):
+            if x in clusters[keys]:
+                labels += [keys]
+                break
+    return labels
+
+def davis_bouldin(X, labels):
+    return davies_bouldin_score(X, labels)
 
 def kmeans(data, k, distance, output, settype):
    
@@ -124,7 +138,7 @@ def kmeans(data, k, distance, output, settype):
         c = c.tolist()
         centroids.append(c)
     best_centroids = centroids
-    print('The best purity score is %f' % best_score)
+#    print('The best purity score is %f' % best_score)
     print('It takes %d number of iterations' % best_iteratoin)
     with open(output, 'w') as out:
         for k in best_clusters.keys():
@@ -133,20 +147,14 @@ def kmeans(data, k, distance, output, settype):
             for pt in clusters[k]:
                 out.write('%s\n' % pt)
             out.write('\n\n\n\n')
-    get_labels(X, clusters)
+  
+    labels= get_labels(X, clusters)
+    print('The Davies-Bouldin score is', davis_bouldin(X, labels))
+    print('The best purity score is %f' % best_score)
+    print('The Silhouette score is', silhouette_score(X, labels, metric='euclidean', sample_size=len(X), random_state=None))
+    print('The Calinski Harabasz score is', calinski_harabasz_score(X, labels))
     
-def get_labels(X, clusters):
-    labels = []
-    for x in X:
-        # find in which cluster x is
-        for keys in list(clusters.keys()):
-            if x in clusters[keys]:
-                labels += [keys]
-                break
-    return labels
 
-def davis_bouldin(X, labels):
-    return sklearn.metrics.davies_bouldin_score(X, labels)
 
 dataset = input("Chose Dataset by number: \n 1. Wholesale customers, 2. Wine, 3. Forest Fires, 4. Heart failure clinical records \n")
 distance = input("Choose distancemeasure by number:\n 1. Manhatten Distance, 2.Euclidean Distance, 3.L5 Distance, 4.Maximum Distance \n")
