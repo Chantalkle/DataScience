@@ -2,12 +2,16 @@ import random
 import numpy as np
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 from collections import Counter
+from collections import defaultdict
 from sklearn import preprocessing
 from sklearn.metrics import davies_bouldin_score
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import calinski_harabasz_score
-from collections import defaultdict
+from sklearn.manifold import TSNE
+
 
 
 def numweekdays(day):
@@ -192,3 +196,29 @@ elif dataset == 'Forest Fires':
 elif dataset == 'Heart failure clinical records':
     thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/heart_failure.csv'
     kmeans(thedata,k,distancemeasure, 'heart_failure.out', dataset)
+
+# Visualisation attempt ( t-distributed stochastic neighbor embedding )
+# https://www.datatechnotes.com/2020/11/tsne-visualization-example-in-python.html
+if dataset == 'Wine':
+    thedata = pd.read_csv('https://raw.githubusercontent.com/Chantalkle/DataScience/main/wine_data.csv', header = 0)
+    #print(thedata.head())
+    wine_target = thedata['Type']
+    #print(wine_target.head())
+    wine_attributes = thedata.loc[:, thedata.columns != 'Type']
+    #print(wine_attributes.head())
+    #wine_clusters = labels
+
+    
+    tsne = TSNE(n_components=2, verbose=1, random_state=123)
+    z = tsne.fit_transform(wine_attributes)
+
+    df = pd.DataFrame()
+    df["y"] = wine_target
+    df["comp-1"] = z[:,0]
+    df["comp-2"] = z[:,1]
+
+    sns.scatterplot(x="comp-1", y="comp-2", hue=df.y.tolist(),
+                palette=sns.color_palette("hls", 3),
+                data=df).set(title="Wine data T-SNE projection") 
+
+    plt.show()
