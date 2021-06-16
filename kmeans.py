@@ -201,12 +201,8 @@ elif dataset == 'Heart failure clinical records':
 # https://www.datatechnotes.com/2020/11/tsne-visualization-example-in-python.html
 if dataset == 'Wine':
     thedata = pd.read_csv('https://raw.githubusercontent.com/Chantalkle/DataScience/main/wine_data.csv', header = 0)
-    #print(thedata.head())
     wine_target = thedata['Type']
-    #print(wine_target.head())
     wine_attributes = thedata.loc[:, thedata.columns != 'Type']
-    #print(wine_attributes.head())
-    #wine_clusters = labels
 
     
     tsne = TSNE(n_components=2, verbose=1, random_state=123)
