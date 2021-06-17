@@ -211,14 +211,14 @@ if dataset == 'Wine':
     dataframe1 = pd.read_csv("file.out", header = None)
     dataframe1.to_csv('file.out.csv', index = None)
     thedata = pd.read_csv('file.out.csv', header = 0)
-    print(thedata.head())
+    #print(thedata.head())
     thedata['14'] = pd.to_numeric(thedata['14'].astype(str).str[:-1], errors='coerce')
     wine_target = thedata['14']
-    print(wine_target.head())
+    #print(wine_target.head())
     wine_attributes = thedata.loc[:, thedata.columns != '0']
-    print(wine_attributes.head())
+    #print(wine_attributes.head())
     wine_attributes = wine_attributes.loc[:, wine_attributes.columns != '14']
-    print(wine_attributes.head())
+    #print(wine_attributes.head())
 
     fig = plt.figure(figsize=(6,6))
 
