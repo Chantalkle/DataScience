@@ -329,7 +329,7 @@ distancemeasure = st.selectbox(
     ('Manhatten Distance', 'Euclidean Distance', 
      'L5 Distance', 'Maximum Distance'))
 
-k = st.slider('choose k', 1, 100, 5)
+k = st.slider('choose k', 1, 15, 5)
 
 evaluation = st.selectbox(
     "Do you want to evalate?",
