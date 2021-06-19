@@ -68,7 +68,7 @@ def get_distance(x, c, measuretype):
     elif measuretype == 'L5 Distance':
         return np.linalg.norm(np.array(x)-np.array(c), ord=5)
     
-    elif measuretype == 'Maximum Norm':
+    elif measuretype == 'Maximum Distance':
         list_distance = []
         for i in range(len(x)):
             list_distance += [abs(x[i]-c[i])]
@@ -316,7 +316,7 @@ dataset = st.selectbox(
 distancemeasure = st.selectbox(
     "Choose distancemeasure",
     ('Manhatten Distance', 'Euclidean Distance', 
-     'L5 Distance', 'Maximum Norm'))
+     'L5 Distance', 'Maximum Distance'))
 
 k = st.slider('choose k', 1, 100, 5)
 
