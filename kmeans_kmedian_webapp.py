@@ -248,11 +248,16 @@ def get_visu(dataset):
     thedata = pd.read_csv('file.out.csv', header = 0)
     print(thedata.head())
     thedata[columns] = pd.to_numeric(thedata[columns].astype(str).str[:-1], errors='coerce')
+    thedata['0'] = pd.to_numeric(thedata['0'].astype(str).str[1: ], errors='coerce')
+    print(thedata.head())
     target = thedata[columns]
     print(target.head())
-    attributes = thedata.loc[:, thedata.columns != '0']
-    print(attributes.head())
-    attributes = attributes.loc[:, attributes.columns != columns]
+    if columns == '14':
+        attributes = thedata.loc[:, thedata.columns != '0']
+        attributes = attributes.loc[:, attributes.columns != columns]
+        print(attributes.head())
+    else:
+        attributes = thedata.loc[:, thedata.columns != columns]
     print(attributes.head())
         
     tsne = TSNE(n_components = 3, verbose = 1, random_state=123)
