@@ -20,9 +20,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.colors import ListedColormap
 import streamlit as st
 
-
-    
-
+ 
 def numweekdays(day):
     weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     return weekdays.index(day)+1
@@ -176,9 +174,7 @@ def kmeans(data, k, distance, output, settype, mean_med):
                 best_clusters = clusters
                 best_score = purity
                 best_iteratoin = iteration
-
-            
-
+         
     centroids = []
     for c in best_centroids:
         c = c.tolist()
@@ -235,132 +231,75 @@ def sill_co(X,labels):
     return metrics.silhouette_score(X, labels, metric='euclidean')
 
 def get_visu(dataset):
+    
     if dataset == 'Wine':
-        dataframe1 = pd.read_csv("file.out", header = None)
-        dataframe1.to_csv('file.out.csv', index = None)
-        thedata = pd.read_csv('file.out.csv', header = 0)
-        print(thedata.head())
-        thedata['14'] = pd.to_numeric(thedata['14'].astype(str).str[:-1], errors='coerce')
-        wine_target = thedata['14']
-        print(wine_target.head())
-        wine_attributes = thedata.loc[:, thedata.columns != '0']
-        print(wine_attributes.head())
-        wine_attributes = wine_attributes.loc[:, wine_attributes.columns != '14']
-        print(wine_attributes.head())
-        
-        
-        
-        tsne = TSNE(n_components = 3, verbose = 1, random_state=123)
-        z = tsne.fit_transform(wine_attributes)
-        
-        df = pd.DataFrame()
-        df["y"] = wine_target
-        df["comp-1"] = z[:,0]
-        df["comp-2"] = z[:,1]
-        df["comp-3"] = z[:,2]
-        
-        # axes instance
-        fig2 = plt.figure(figsize=(5,5))
-        ax = Axes3D(fig2)
-        fig2.add_axes(ax)
-        
-        # get colormap from seaborn
-        #cmap = ListedColormap(sns.color_palette("husl", 256).as_hex())
-        
-        # plot
-        sc = ax.scatter(xs = df["comp-1"], ys = df["comp-2"], zs= df["comp-3"], c= df["y"] , marker='o', alpha=1)
-        ax.set_xlabel('X Label')
-        ax.set_ylabel('Y Label')
-        ax.set_zlabel('Z Label')
-        
-        # legend
-        plt.legend(*sc.legend_elements(), bbox_to_anchor=(1.05, 1), loc=2)
-        
-        # save
-        #plt.savefig("scatter_hue", bbox_inches='tight') 
-        st.write(fig2)
-        
-        tsne1 = TSNE(n_components = 3, verbose = 1, random_state=123)
-        z1 = tsne1.fit_transform(wine_attributes)
-        
-        df1 = pd.DataFrame()
-        df1["y"] = wine_target
-        df1["comp-1"] = z1[:,0]
-        df1["comp-2"] = z1[:,1]
-        
-        fig1 = plt.figure(figsize=(5,5))
-        sns.scatterplot(x="comp-1", y="comp-2", hue=df1.y.tolist(), palette="deep",
-                        data=df1).set(title="Wine data T-SNE projection") 
-        
-        #plt.show()
-        
-        
-        
-        st.write(fig1) 
+        columns = '14'
     if dataset == 'Wholesale customers':
-        dataframe1 = pd.read_csv("file.out", header = None)
-        dataframe1.to_csv('file.out.csv', index = None)
-        thedata = pd.read_csv('file.out.csv', header = 0)
-        print(thedata.head())
-        thedata['6'] = pd.to_numeric(thedata['6'].astype(str).str[:-1], errors='coerce')
-        target = thedata['6']
-        print(target.head())
-        attributes = thedata.loc[:, thedata.columns != '0']
-        print(attributes.head())
-        attributes = attributes.loc[:, attributes.columns != '6']
-        print(attributes.head())
+        columns = '6'
+    if dataset == 'Forest Fires':
+        columns = '13'
+    if dataset == 'Heart failure clinical records':
+        columns = '13'
+
+    dataframe1 = pd.read_csv("file.out", header = None)
+    dataframe1.to_csv('file.out.csv', index = None)
+    thedata = pd.read_csv('file.out.csv', header = 0)
+    print(thedata.head())
+    thedata[columns] = pd.to_numeric(thedata[columns].astype(str).str[:-1], errors='coerce')
+    target = thedata[columns]
+    print(target.head())
+    attributes = thedata.loc[:, thedata.columns != '0']
+    print(attributes.head())
+    attributes = attributes.loc[:, attributes.columns != columns]
+    print(attributes.head())
         
+    tsne = TSNE(n_components = 3, verbose = 1, random_state=123)
+    z = tsne.fit_transform(attributes)
         
+    df = pd.DataFrame()
+    df["y"] = target
+    df["comp-1"] = z[:,0]
+    df["comp-2"] = z[:,1]
+    df["comp-3"] = z[:,2]
         
-        tsne = TSNE(n_components = 3, verbose = 1, random_state=123)
-        z = tsne.fit_transform(attributes)
+    # axes instance
+    fig2 = plt.figure(figsize=(5,5))
+    ax = Axes3D(fig2)
+    fig2.add_axes(ax)
         
-        df = pd.DataFrame()
-        df["y"] = target
-        df["comp-1"] = z[:,0]
-        df["comp-2"] = z[:,1]
-        df["comp-3"] = z[:,2]
+    # get colormap from seaborn
+    #cmap = ListedColormap(sns.color_palette("husl", 256).as_hex())
         
-        # axes instance
-        fig2 = plt.figure(figsize=(5,5))
-        ax = Axes3D(fig2)
-        fig2.add_axes(ax)
+    # plot
+    sc = ax.scatter(xs = df["comp-1"], ys = df["comp-2"], zs= df["comp-3"], c= df["y"] , marker='o', alpha=1)
+    ax.set_xlabel('X Label')
+    ax.set_ylabel('Y Label')
+    ax.set_zlabel('Z Label')
         
-        # get colormap from seaborn
-        #cmap = ListedColormap(sns.color_palette("husl", 256).as_hex())
+    # legend
+    plt.legend(*sc.legend_elements(), bbox_to_anchor=(1.05, 1), loc=2)
         
-        # plot
-        sc = ax.scatter(xs = df["comp-1"], ys = df["comp-2"], zs= df["comp-3"], c= df["y"] , marker='o', alpha=1)
-        ax.set_xlabel('X Label')
-        ax.set_ylabel('Y Label')
-        ax.set_zlabel('Z Label')
+    # save
+    #plt.savefig("scatter_hue", bbox_inches='tight') 
+    st.write(fig2)
         
-        # legend
-        plt.legend(*sc.legend_elements(), bbox_to_anchor=(1.05, 1), loc=2)
+    tsne1 = TSNE(n_components = 3, verbose = 1, random_state=123)
+    z1 = tsne1.fit_transform(attributes)
         
-        # save
-        #plt.savefig("scatter_hue", bbox_inches='tight') 
-        st.write(fig2)
+    df1 = pd.DataFrame()
+    df1["y"] = target
+    df1["comp-1"] = z1[:,0]
+    df1["comp-2"] = z1[:,1]
         
-        tsne1 = TSNE(n_components = 3, verbose = 1, random_state=123)
-        z1 = tsne1.fit_transform(attributes)
+    fig1 = plt.figure(figsize=(5,5))
+    sns.scatterplot(x="comp-1", y="comp-2", hue=df1.y.tolist(), palette="deep",
+                    data=df1).set(title= dataset +" T-SNE projection") 
         
-        df1 = pd.DataFrame()
-        df1["y"] = target
-        df1["comp-1"] = z1[:,0]
-        df1["comp-2"] = z1[:,1]
-        
-        fig1 = plt.figure(figsize=(5,5))
-        sns.scatterplot(x="comp-1", y="comp-2", hue=df1.y.tolist(), palette="deep",
-                        data=df1).set(title="Wholesale customers data T-SNE projection") 
-        
-        #plt.show()
-        
-        
-        
-        st.write(fig1) 
+    #plt.show()     
+    st.write(fig1) 
+
   
- ###################################Desktop App####################################################
+###################################--Web App--####################################################
 st.title('kmeans clustering')
 
 path = os.path.abspath(".")
@@ -405,9 +344,3 @@ if st.button("Start"):
 else: 
     st.write("Ready to calculate!")
     
-
-  
-
-
-
-
