@@ -200,6 +200,8 @@ def kmeans(data, k, distance, output, settype, mean_med):
         st.write('DBI: ', davis_bouldin(X, labels))
         st.write('CHI: ', cal_hara(X, labels))
         st.write('SC: ', sill_co(X, labels))
+        if settype == 'Wine':
+            st.write('Purity: ', best_score)
         
     else:
         pass
