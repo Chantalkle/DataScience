@@ -138,7 +138,7 @@ def find_centers_mean(X, K, measuretype):
 def get_purity(clusters, centroids, num_instances):
     counts = 0
     for k in clusters.keys():
-        labels = np.array(clusters[k])[:, -1]
+        labels = np.array(clusters[k])[:, 0]
         counts += Counter(labels).most_common(1)[0][1]
     return float(counts)/num_instances
 
