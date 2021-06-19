@@ -18,6 +18,7 @@ import streamlit as st
 
 
 
+
     
 
 def numweekdays(day):
@@ -67,7 +68,7 @@ def get_distance(x, c, measuretype):
     elif measuretype == 'L5 Distance':
         return np.linalg.norm(np.array(x)-np.array(c), ord=5)
     
-    elif measuretype == 'Maximum Norm':
+    elif measuretype == 'Maximum Distance':
         list_distance = []
         for i in range(len(x)):
             list_distance += [abs(x[i]-c[i])]
@@ -137,7 +138,7 @@ def find_centers_mean(X, K, measuretype):
 def get_purity(clusters, centroids, num_instances):
     counts = 0
     for k in clusters.keys():
-        labels = np.array(clusters[k])[:, 0]
+        labels = np.array(clusters[k])[:, -1]
         counts += Counter(labels).most_common(1)[0][1]
     return float(counts)/num_instances
 
@@ -176,6 +177,12 @@ def kmeans(data, k, distance, output, settype, mean_med):
         #print('DBI: ', davis_bouldin(X, labels))
         #print('CHI: ', cal_hara(X, labels))
         #print('SC: ', sill_co(X, labels))
+        st.write('The following evaluation measures are calculated for you: \
+                 Davies Bouldin Index (DBI),  Calinski Harabasz Index (CHI)\
+                 Silhouette Coefficient (SC).')
+        st.write('The DBI must be minimized for proper clustering. \
+                 The CHI and SC must be maximized for proper clustering.' )
+       
         st.write('DBI: ', davis_bouldin(X, labels))
         st.write('CHI: ', cal_hara(X, labels))
         st.write('SC: ', sill_co(X, labels))
@@ -353,9 +360,9 @@ dataset = st.selectbox(
 distancemeasure = st.selectbox(
     "Choose distancemeasure",
     ('Manhatten Distance', 'Euclidean Distance', 
-     'L5 Distance', 'Maximum Norm'))
+     'L5 Distance', 'Maximum Distance'))
 
-k = st.slider('choose k', 1, 100, 5)
+k = st.slider('choose k', 1, 15, 5)
 
 evaluation = st.selectbox(
     "Do you want to evalate?",
@@ -381,7 +388,7 @@ if st.button("Start"):
 else: 
     st.write("Ready to calculate!")
     
-
+#
   
 
 
