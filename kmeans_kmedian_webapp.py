@@ -49,8 +49,12 @@ def get_data(data, settype):
               Y.append(entry[2:])
             
         X=Y
+        
+    min_max_scaler = preprocessing.MinMaxScaler()
+    X_scaled= min_max_scaler.fit_transform(X)
+    X_scaled = X_scaled.tolist()
 
-    return X
+    return X_scaled
 
 def is_converged(centroids, old_centroids):
     return set([tuple(a) for a in centroids]) == set([tuple(b) for b in old_centroids])
