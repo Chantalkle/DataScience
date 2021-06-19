@@ -17,6 +17,7 @@ from collections import defaultdict
 from plotly.offline import plot
 #import plotly.graph_objs as pgo
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 
 
@@ -233,60 +234,73 @@ for d in range(0,4):
         davies_list[d] += [davies]
         silhouette_list[d] += [silhouette]
         calinski_list[d] += [calinski]
-        
+
+running = True
+while running: 
+    des= 'Dataset ' + dataset + ' with '
+    desdav = des + 'Davis-Bouldin index'
+    dessil = des + 'Silhouette index'
+    descal = des + 'Calinski Harabasz index'
+   
+    ind = input("Choose validatiuon index: DBI or SI or CHI or end  \n")
+    if ind == 'DBI':
+        figdav = go.Figure()
+        figdav.add_trace(go.Scatter(x=axis, y=davies_list[0],
+                            mode='lines+markers',
+                            name='Manhatten Distance'))
+        figdav.add_trace(go.Scatter(x=axis, y=davies_list[1],
+                            mode='lines+markers',
+                            name='Euclidean Distance'))
+        figdav.add_trace(go.Scatter(x=axis, y=davies_list[2],
+                            mode='lines+markers',
+                            name='L5 Distance'))
+        figdav.add_trace(go.Scatter(x=axis, y=davies_list[3],
+                            mode='lines+markers',
+                            name='Maximum Distance'))
+        figdav.update_layout(title=desdav, xaxis_title='k')
+        plot(figdav)
+        #figdav.show()
     
-des= 'Dataset ' + dataset + ' with '
-desdav = des + 'Davis-Bouldin index'
-dessil = des + 'Silhouette index'
-descal = des + 'Calinski Harabasz index'
+    elif ind == 'SI':
+        figsil = go.Figure()
+        figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[0],
+                            mode='lines+markers',
+                            name='Manhatten Distance'))
+        figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[1],
+                            mode='lines+markers',
+                            name='Euclidean Distance'))
+        figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[2],
+                            mode='lines+markers',
+                            name='L5 Distance'))
+        figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[3],
+                            mode='lines+markers',
+                            name='Maximum Distance'))
+        figsil.update_layout(title=dessil, xaxis_title='k')
+        plot(figsil)
+        #figsil.show()
+        
+    elif ind == 'CHI':
+        
+        figcal = go.Figure()
+        figcal.add_trace(go.Scatter(x=axis, y=calinski_list[0],
+                            mode='lines+markers',
+                            name='Manhatten Distance'))
+        figcal.add_trace(go.Scatter(x=axis, y=calinski_list[1],
+                            mode='lines+markers',
+                            name='Euclidean Distance'))
+        figcal.add_trace(go.Scatter(x=axis, y=calinski_list[2],
+                            mode='lines+markers',
+                            name='L5 Distance'))
+        figcal.add_trace(go.Scatter(x=axis, y=calinski_list[3],
+                            mode='lines+markers',
+                            name='Maximum Distance'))
+        figcal.update_layout(title=descal, xaxis_title='k')
+        plot(figcal)
+    
+    elif ind == 'end': 
+        running = False
+    
+    else:
+        print("Error!")
 
-figdav = go.Figure()
-figdav.add_trace(go.Scatter(x=axis, y=davies_list[0],
-                    mode='lines+markers',
-                    name='Manhatten Distance'))
-figdav.add_trace(go.Scatter(x=axis, y=davies_list[1],
-                    mode='lines+markers',
-                    name='Euclidean Distance'))
-figdav.add_trace(go.Scatter(x=axis, y=davies_list[2],
-                    mode='lines+markers',
-                    name='L5 Distance'))
-figdav.add_trace(go.Scatter(x=axis, y=davies_list[3],
-                    mode='lines+markers',
-                    name='Maximum Distance'))
-figdav.update_layout(title=desdav, xaxis_title='k')
-#plot(figdav)
-figdav.show()
 
-figsil = go.Figure()
-figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[0],
-                    mode='lines+markers',
-                    name='Manhatten Distance'))
-figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[1],
-                    mode='lines+markers',
-                    name='Euclidean Distance'))
-figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[2],
-                    mode='lines+markers',
-                    name='L5 Distance'))
-figsil.add_trace(go.Scatter(x=axis, y=silhouette_list[3],
-                    mode='lines+markers',
-                    name='Maximum Distance'))
-figsil.update_layout(title=dessil, xaxis_title='k')
-#plot(figsil)
-figsil.show()
-
-figcal = go.Figure()
-figcal.add_trace(go.Scatter(x=axis, y=calinski_list[0],
-                    mode='lines+markers',
-                    name='Manhatten Distance'))
-figcal.add_trace(go.Scatter(x=axis, y=calinski_list[1],
-                    mode='lines+markers',
-                    name='Euclidean Distance'))
-figcal.add_trace(go.Scatter(x=axis, y=calinski_list[2],
-                    mode='lines+markers',
-                    name='L5 Distance'))
-figcal.add_trace(go.Scatter(x=axis, y=calinski_list[3],
-                    mode='lines+markers',
-                    name='Maximum Distance'))
-figcal.update_layout(title=descal, xaxis_title='k')
-#plot(figcal)
-figcal.show()
