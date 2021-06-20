@@ -12,6 +12,8 @@ import sklearn
 from collections import Counter
 from sklearn import metrics
 from sklearn.manifold import TSNE
+from sklearn.metrics.cluster import adjusted_rand_score
+from sklearn import preprocessing
 from collections import defaultdict
 
 from plotly.offline import plot
@@ -32,10 +34,13 @@ def nummonths(month):
     months = ['jan','feb','mar','may','apr','jun','jul','aug','sep','oct','nov','dec']
     return months.index(month)+1
 
-
 def get_data(data, settype):
     
     X = pd.read_csv(data, header = 0)
+
+#    print('The data FORMAT is shown as below\n')
+#    print(X.head())
+#    st.write(X.head())
     X = X.values.tolist()
     if settype == 'Forest Fires':
         for entry in X: 
@@ -46,8 +51,45 @@ def get_data(data, settype):
         Y = []
         for entry in X:
               Y.append(entry[2:])
+            
         X=Y
-    return X
+    if settype == 'Wine':
+        Y = [] # Attributes
+        
+        for entry in X:
+            Y.append(entry[1:]) 
+        X = Y
+    min_max_scaler = preprocessing.MinMaxScaler()
+    X_scaled= min_max_scaler.fit_transform(X)
+    X_scaled = X_scaled.tolist()
+    return X_scaled
+
+
+#def get_data(data, settype):
+    
+    X = pd.read_csv(data, header = 0)
+    X = X.values.tolist()
+    if settype == 'Forest Fires':
+        for entry in X: 
+            entry[2] = nummonths(entry[2])
+            entry[3] = numweekdays(entry[3])
+    #remove categorial attributes
+    if settype == 'Forest Fires':
+        for entry in X: 
+            entry[2] = nummonths(entry[2])
+            entry[3] = numweekdays(entry[3])
+    #remove categorial attributes
+    if settype == 'Wholesale customers':
+        Y = []
+        for entry in X:
+              Y.append(entry[2:])
+            
+        X=Y
+        
+    min_max_scaler = preprocessing.MinMaxScaler()
+    X_scaled= min_max_scaler.fit_transform(X)
+    X_scaled = X_scaled.tolist()
+    return X_scaled
 
 def is_converged(centroids, old_centroids):
     return set([tuple(a) for a in centroids]) == set([tuple(b) for b in old_centroids])
@@ -150,7 +192,7 @@ def get_labels(X, clusters):
     return labels
 
 def davis_bouldin(X, labels):
-    return sklearn.metrics.davies_bouldin_score(X, labels)
+    return metrics.davies_bouldin_score(X, labels)
 
 def cal_hara(X, labels):
     return metrics.calinski_harabasz_score(X, labels)
@@ -158,8 +200,10 @@ def cal_hara(X, labels):
 def sill_co(X,labels):
     return metrics.silhouette_score(X, labels, metric='euclidean')
 
+def rand_sc(Z, labels):
+    return adjusted_rand_score(Z, labels)
+
 def kmeans(data, k, distance, output, settype, mean_med):
-   
     X = get_data(data, settype)
     num_instances = len(X)
     if mean_med == 'KMeans':
@@ -187,8 +231,16 @@ def kmeans(data, k, distance, output, settype, mean_med):
     davies = davis_bouldin(X, labels)
     silhouette = sill_co(X, labels)
     calinski = cal_hara(X, labels)
-    purity= get_purity(clusters, centroids, num_instances)
-    return(davies, silhouette, calinski, purity)
+    if dataset == 'Wine':
+        C = pd.read_csv(data, header = 0)
+        C = C.values.tolist()
+        Z = [item[0] for item in C]
+        rand = rand_sc(Z,labels)
+    else:
+        rand = 0
+    
+#    purity= get_purity(clusters, centroids, num_instances)
+    return(davies, silhouette, calinski, rand)
 
     
 
@@ -228,7 +280,7 @@ elif dataset == '4':
 davies_list = [[],[],[],[]]
 silhouette_list = [[],[],[],[]]
 calinski_list = [[],[],[],[]]
-purity_list = [[],[],[],[]]
+rand_list = [[],[],[],[]]
 axis = []
 
 for d in range(0,4):
@@ -245,22 +297,23 @@ for d in range(0,4):
     for x in range(2,k+1):
         if dataset == 'Wholesale customers':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/wholesale.csv'
-            (davies, silhouette, calinski, purity)=kmeans(thedata,k,distancemeasure, 'wholesale.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'wholesale.out', dataset, mean_med)
         elif dataset == 'Wine':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/wine_data.csv'
-            (davies, silhouette, calinski, purity)=kmeans(thedata,k,distancemeasure, 'wine_data.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'wine_data.out', dataset, mean_med)
         elif dataset == 'Forest Fires':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/forestfires.csv'
-            (davies, silhouette, calinski, purity)=kmeans(thedata,k,distancemeasure, 'forestfire.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'forestfire.out', dataset, mean_med)
         elif dataset == 'Heart failure clinical records':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/heart_failure.csv'
-            (davies, silhouette, calinski, purity)=kmeans(thedata,k,distancemeasure, 'heart_failure.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'heart_failure.out', dataset, mean_med)
             
         axis +=[x]
         davies_list[d] += [davies]
         silhouette_list[d] += [silhouette]
         calinski_list[d] += [calinski]
-        purity_list[d] += [purity]
+        if dataset == 'Wine':
+            rand_list[d] += [rand]
         
     
 running = True
@@ -270,10 +323,10 @@ while running:
     desdav = des + 'Davis-Bouldin index' + des2
     dessil = des + 'Silhouette index' + des2
     descal = des + 'Calinski Harabasz index' + des2
-    despur = des + 'Purity index' + des2
+    desr = des + 'Rand index' + des2
    
     if dataset == 'Wine':
-        ind = input("Choose validatiuon index: DBI or SI or CHI or PI or end  \n")
+        ind = input("Choose validatiuon index: DBI or SI or CHI or RI or end  \n")
     else:    
         ind = input("Choose validatiuon index: DBI or SI or CHI or end  \n")
     
@@ -328,22 +381,22 @@ while running:
         figcal.update_layout(title=descal, xaxis_title='k')
         plot(figcal)
     
-    elif ind == 'PI':
-        figpur = go.Figure()
-        figpur.add_trace(go.Scatter(x=axis, y=purity_list[0],
+    elif (ind == 'RI' and dataset == 'Wine'):
+        figr = go.Figure()
+        figr.add_trace(go.Scatter(x=axis, y=rand_list[0],
                             mode='lines+markers',
                             name='Manhatten Distance'))
-        figpur.add_trace(go.Scatter(x=axis, y=purity_list[1],
+        figr.add_trace(go.Scatter(x=axis, y=rand_list[1],
                             mode='lines+markers',
                             name='Euclidean Distance'))
-        figpur.add_trace(go.Scatter(x=axis, y=purity_list[2],
+        figr.add_trace(go.Scatter(x=axis, y=rand_list[2],
                             mode='lines+markers',
                             name='L5 Distance'))
-        figpur.add_trace(go.Scatter(x=axis, y=purity_list[3],
+        figr.add_trace(go.Scatter(x=axis, y=rand_list[3],
                             mode='lines+markers',
                             name='Maximum Distance'))
-        figpur.update_layout(title=despur, xaxis_title='k')
-        plot(figpur)
+        figr.update_layout(title=desr, xaxis_title='k')
+        plot(figr)
     
     elif ind == 'end': 
         running = False
