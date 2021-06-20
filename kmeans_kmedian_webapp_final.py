@@ -240,7 +240,7 @@ def get_visu(dataset):
     """Visualizes/plots the clusters"""
     
     if dataset == 'Wine':
-        columns = '14'
+        columns = '13'
     if dataset == 'Wholesale customers':
         columns = '6'
     if dataset == 'Forest Fires':
