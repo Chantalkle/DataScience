@@ -191,9 +191,9 @@ def kmeans(data, k, distance, output, settype, mean_med):
         #print('SC: ', sill_co(X, labels))
         st.write('The following evaluation measures are calculated for you: \
                  Davies Bouldin Index (DBI),  Calinski Harabasz Index (CHI)\
-                 Silhouette Coefficient (SC).')
+                 Silhouette Coefficient (SC), Adjusted Rand Index (RAND) - for labelled data')
         st.write('The DBI must be minimized for proper clustering. \
-                 The CHI and SC must be maximized for proper clustering.' )
+                 The RAND, CHI and SC must be maximized for proper clustering.' )
        
         st.write('DBI: ', davis_bouldin(X, labels))
         st.write('CHI: ', cal_hara(X, labels))
