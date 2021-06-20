@@ -257,12 +257,7 @@ def get_visu(dataset):
     print(thedata.head())
     target = thedata[columns]
     print(target.head())
-    if columns == '14':
-        attributes = thedata.loc[:, thedata.columns != '0']
-        attributes = attributes.loc[:, attributes.columns != columns]
-        print(attributes.head())
-    else:
-        attributes = thedata.loc[:, thedata.columns != columns]
+    attributes = thedata.loc[:, thedata.columns != columns]
     print(attributes.head())
         
     tsne = TSNE(n_components = 3, verbose = 1, random_state=123)
