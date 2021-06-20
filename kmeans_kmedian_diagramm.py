@@ -270,16 +270,16 @@ for d in range(0,4):
     for x in range(2,k+1):
         if dataset == 'Wholesale customers':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/wholesale.csv'
-            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'wholesale.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,x,distancemeasure, 'wholesale.out', dataset, mean_med)
         elif dataset == 'Wine':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/wine_data.csv'
-            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'wine_data.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,x,distancemeasure, 'wine_data.out', dataset, mean_med)
         elif dataset == 'Forest Fires':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/forestfires.csv'
-            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'forestfire.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,x,distancemeasure, 'forestfire.out', dataset, mean_med)
         elif dataset == 'Heart failure clinical records':
             thedata = 'https://raw.githubusercontent.com/Chantalkle/DataScience/main/heart_failure.csv'
-            (davies, silhouette, calinski, rand)=kmeans(thedata,k,distancemeasure, 'heart_failure.out', dataset, mean_med)
+            (davies, silhouette, calinski, rand)=kmeans(thedata,x,distancemeasure, 'heart_failure.out', dataset, mean_med)
             
         axis +=[x]
         davies_list[d] += [davies]
