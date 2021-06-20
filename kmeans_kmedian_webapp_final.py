@@ -48,16 +48,15 @@ def get_data(data, settype):
     if settype == 'Wholesale customers':
         Y = []
         for entry in X:
-              Y.append(entry[2:])
-            
+              Y.append(entry[2:])  
         X=Y
         
     if settype == 'Wine':
         Y = [] # Attributes
-        
         for entry in X:
             Y.append(entry[1:]) 
         X = Y
+        
     min_max_scaler = preprocessing.MinMaxScaler()
     X_scaled= min_max_scaler.fit_transform(X)
     X_scaled = X_scaled.tolist()
