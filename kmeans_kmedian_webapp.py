@@ -162,10 +162,7 @@ def kmeans(data, k, distance, output, settype, mean_med):
         centroids, clusters , iteration= find_centers_mean(X, k, distance)
     else:
         centroids, clusters , iteration= find_centers_med(X, k, distance)
-    
-
-            
-
+   
     #centroids = []
     #for c in best_centroids:
      #   c = c.tolist()
