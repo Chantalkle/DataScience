@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jun 19 14:50:49 2021
-
-@author: Leoni
-"""
 import random 
 import numpy as np
 import pandas as pd
