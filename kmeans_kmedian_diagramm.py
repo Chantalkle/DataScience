@@ -12,13 +12,6 @@ from collections import defaultdict
 
 from plotly.offline import plot
 import plotly.graph_objects as go
-#import matplotlib.pyplot as plt
-#import seaborn as sns
-
-
-#from mpl_toolkits.mplot3d import Axes3D
-
-#import streamlit as st   
 
 def numweekdays(day):
     """Only used for Forest Fires DataSet, maps weekdays to numbers"""
