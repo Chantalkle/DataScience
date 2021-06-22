@@ -191,7 +191,7 @@ def kmeans(data, k, distance, output, settype, mean_med):
         #print('CHI: ', cal_hara(X, labels))
         #print('SC: ', sill_co(X, labels))
         st.write('The following evaluation measures are calculated for you: \
-                 Davies Bouldin Index (DBI),  Calinski Harabasz Index (CHI)\
+                 Davies Bouldin Index (DBI),  Calinski Harabasz Index (CHI),\
                  Silhouette Coefficient (SC), Adjusted Rand Index (RAND) - for labelled data')
         st.write('The DBI must be minimized for proper clustering. \
                  The RAND, CHI and SC must be maximized for proper clustering.' )
@@ -330,7 +330,7 @@ distancemeasure = st.selectbox(
 k = st.slider('choose k', 2, 15, 5)
 
 evaluation = st.selectbox(
-    "Do you want to evalate?",
+    "Do you want to evaluate?",
     ('Yes', 'No'))
 
 
