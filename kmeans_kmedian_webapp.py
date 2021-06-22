@@ -66,7 +66,6 @@ def get_data(data, settype):
 def is_converged(centroids, old_centroids):
     return set([tuple(a) for a in centroids]) == set([tuple(b) for b in old_centroids])
 
-# return int: euclidean distance
 def get_distance(x, c, measuretype):
     """Depending on which distance is given return distance """
  
