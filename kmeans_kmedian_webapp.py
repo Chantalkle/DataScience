@@ -160,7 +160,6 @@ def get_purity(clusters, centroids, num_instances):
 
 
 def kmeans(data, k, distance, output, settype, mean_med):
-   """does the work for kmean or kmedian with distance measure distance on dataset data, depending on the value of mean_med. """
     X = get_data(data, settype)
     #num_instances = len(X)
     if mean_med == 'KMeans':
