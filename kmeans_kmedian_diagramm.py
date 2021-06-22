@@ -164,6 +164,7 @@ def sill_co(X,labels):
 def rand_sc(Z, labels):
     return adjusted_rand_score(Z, labels)
 
+# return: tuple (davies, silhouette, calinski, rand)
 def kmeans(data, k, distance, output, settype, mean_med):
     X = get_data(data, settype)
     num_instances = len(X)
@@ -200,12 +201,11 @@ def kmeans(data, k, distance, output, settype, mean_med):
     else:
         rand = 0
     
-#    purity= get_purity(clusters, centroids, num_instances)
+#   purity= get_purity(clusters, centroids, num_instances)  
+    # returns the validation indices
     return(davies, silhouette, calinski, rand)
 
-    
-
-    
+        
 dataset = input("Chose Dataset by number: \n 1. Wholesale customers, 2. Wine, 3. Forest Fires, 4. Heart failure clinical records \n")
 m = input('Choose Algorithem by number: \n 1. KMeans or 2. KMedian \n')
 if m == '1':
