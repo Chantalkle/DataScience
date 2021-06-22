@@ -27,15 +27,17 @@ import plotly.graph_objects as go
 #import streamlit as st   
 
 def numweekdays(day):
+    """Only used for Forest Fires DataSet, maps weekdays to numbers"""
     weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     return weekdays.index(day)+1
 
 def nummonths(month):
+    """Only used for Forest Fires DataSet, maps months to numbers"""
     months = ['jan','feb','mar','may','apr','jun','jul','aug','sep','oct','nov','dec']
     return months.index(month)+1
 
 def get_data(data, settype):
-    
+    """Reads chosen DataSet (settype) and returns scaled data for k-Means/k-Median"""
     X = pd.read_csv(data, header = 0)
 
 #    print('The data FORMAT is shown as below\n')
@@ -67,7 +69,6 @@ def get_data(data, settype):
 def is_converged(centroids, old_centroids):
     return set([tuple(a) for a in centroids]) == set([tuple(b) for b in old_centroids])
 
-# return int: euclidean distance
 def get_distance(x, c, measuretype):
     """Depending on which distance is given return distance """
  
