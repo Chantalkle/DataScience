@@ -64,6 +64,7 @@ def get_data(data, settype):
     return X_scaled
 
 def is_converged(centroids, old_centroids):
+    """returns True or False depending on if the new centroidsare the same as the old centroids or not"""
     return set([tuple(a) for a in centroids]) == set([tuple(b) for b in old_centroids])
 
 def get_distance(x, c, measuretype):
@@ -86,6 +87,7 @@ def get_distance(x, c, measuretype):
 
 # return: dictionary of lists 
 def get_clusters(X, centroids, measuretype):
+    """calculates to which centroid the datapoints belong"""
     clusters = defaultdict(list)
     for x in X:
         # cluster is a num to indicate the # of centroids
@@ -96,6 +98,7 @@ def get_clusters(X, centroids, measuretype):
 
 # return: list of np.lists 
 def get_centeroids_kmean(old_centroids, clusters):
+    """calculates centroids for kmean"""
     new_centroids = []
     keys = sorted(clusters.keys())
     for k in keys:
@@ -109,6 +112,7 @@ def get_centeroids_kmean(old_centroids, clusters):
     return new_centroids
 
 def get_centeroids_kmed(old_centroids, clusters):
+    """calculates centroids for kmedian"""
     new_centroids = []
     keys = sorted(clusters.keys())
     for k in keys:
@@ -123,6 +127,7 @@ def get_centeroids_kmed(old_centroids, clusters):
 
 # return: tuple (centroids, clusters, iteration)
 def find_centers_med(X, K, measuretype):
+    """finds centers for kmedian"""
     old_centroids = random.sample(X, K)
     centroids = random.sample(X, K)
     iteration = 0
@@ -134,6 +139,7 @@ def find_centers_med(X, K, measuretype):
     return (centroids, clusters, iteration)
 
 def find_centers_mean(X, K, measuretype):
+    """finds centers for kmedian"""
     old_centroids = random.sample(X, K)
     centroids = random.sample(X, K)
     iteration = 0
@@ -154,7 +160,7 @@ def get_purity(clusters, centroids, num_instances):
 
 
 def kmeans(data, k, distance, output, settype, mean_med):
-   
+   """does the work for kmean or kmedian with distance measure distance on dataset data, depending on the value of mean_med. """
     X = get_data(data, settype)
     #num_instances = len(X)
     if mean_med == 'KMeans':
@@ -211,6 +217,7 @@ def kmeans(data, k, distance, output, settype, mean_med):
     get_visu(dataset)
     
 def get_labels(X, clusters):
+    """returns clusters as labels in format needed for sklearn functions"""
     labels = []
     for x in X:
         # find in which cluster x is
